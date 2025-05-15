@@ -20,6 +20,6 @@ public class SaturacaoOxigenio extends Medida{
 
     @Override
     public String toString() {
-        return super.toString() + ", Saturação de Oxigênio: " + saturacao;
+        return super.toString() + "\nSaturação de Oxigênio: " + saturacao;
     }
 }

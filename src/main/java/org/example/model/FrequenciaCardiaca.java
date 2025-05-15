@@ -18,10 +18,6 @@ public class FrequenciaCardiaca extends Medida{
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("FrequenciaCardiaca{");
-        sb.append(super.toString());
-        sb.append("frequencia=").append(frequencia);
-        sb.append('}');
-        return sb.toString();
+        return super.toString() + "\nFrequência Cardíaca: " + frequencia;
     }
 }

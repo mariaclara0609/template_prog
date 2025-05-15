@@ -44,7 +44,7 @@ public class Hospital {
 
     // Adicionar técnico de saúde
     public boolean adicionarTecnico(TecnicoSaude tecnico) {
-        if (tecnico != null && procurarTecnico(tecnico.getId()) != null) {
+        if (tecnico != null && procurarTecnico(tecnico.getId()) == null) {
             lstTecnicos.add(tecnico);
             return true;
         }

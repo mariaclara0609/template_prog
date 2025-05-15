@@ -76,7 +76,7 @@ public class MenuUI {
     }
 
     private void registarPaciente() {
-        System.out.println("\n--- Registrar Paciente ---");
+        System.out.println("\n--- Registar Paciente ---");
         int id = Utils.readIntFromConsole("ID do paciente: ");
         String nome = Utils.readLineFromConsole("Nome do paciente: ");
         String sexo = Utils.readLineFromConsole("Sexo (Masculino/Feminino): ");
@@ -92,7 +92,7 @@ public class MenuUI {
     }
 
     private void registarTecnicoSaude() {
-        System.out.println("\n--- Registrar Técnico de Saúde ---");
+        System.out.println("\n--- Registar Técnico de Saúde ---");
         int id = Utils.readIntFromConsole("ID do técnico: ");
         String nome = Utils.readLineFromConsole("Nome do técnico: ");
         String sexo = Utils.readLineFromConsole("Sexo (Masculino/Feminino): ");
@@ -108,7 +108,7 @@ public class MenuUI {
     }
 
     private void registrarFrequenciaCardiaca() {
-        System.out.println("\n--- Registrar Frequência Cardíaca ---");
+        System.out.println("\n--- Registar Frequência Cardíaca ---");
         int idPaciente = Utils.readIntFromConsole("ID do paciente: ");
         int idTecnico = Utils.readIntFromConsole("ID do técnico de saúde: ");
         double frequencia = Utils.readDoubleFromConsole("Frequência cardíaca: ");
@@ -120,9 +120,9 @@ public class MenuUI {
         if (paciente != null && tecnico != null) {
             FrequenciaCardiaca freq = new FrequenciaCardiaca(data, frequencia, paciente, tecnico);
             if (hospital.adicionarMedicao(freq)) {
-                System.out.println("Frequência cardíaca registrada com sucesso!");
+                System.out.println("Frequência cardíaca registada com sucesso!");
             } else {
-                System.out.println("Erro ao registrar a frequência cardíaca.");
+                System.out.println("Erro ao registar a frequência cardíaca.");
             }
         } else {
             System.out.println("Erro: Paciente ou técnico não encontrado!");
@@ -130,7 +130,7 @@ public class MenuUI {
     }
 
     private void registrarSaturacaoOxigenio() {
-        System.out.println("\n--- Registrar Saturação de Oxigênio ---");
+        System.out.println("\n--- Registar Saturação de Oxigênio ---");
         int idPaciente = Utils.readIntFromConsole("ID do paciente: ");
         int idTecnico = Utils.readIntFromConsole("ID do técnico de saúde: ");
         double saturacao = Utils.readDoubleFromConsole("Saturação de oxigênio: ");
@@ -142,9 +142,9 @@ public class MenuUI {
         if (paciente != null && tecnico != null) {
             SaturacaoOxigenio saturacaoOxigenio = new SaturacaoOxigenio(data, saturacao, paciente, tecnico);
             if (hospital.adicionarMedicao(saturacaoOxigenio)) {
-                System.out.println("Saturação de oxigênio registrada com sucesso!");
+                System.out.println("Saturação de oxigênio registada com sucesso!");
             } else {
-                System.out.println("Erro ao registrar a saturação de oxigênio.");
+                System.out.println("Erro ao registar a saturação de oxigênio.");
             }
         } else {
             System.out.println("Erro: Paciente ou técnico não encontrado!");
@@ -152,7 +152,7 @@ public class MenuUI {
     }
 
     private void registrarTemperatura() {
-        System.out.println("\n--- Registrar Temperatura ---");
+        System.out.println("\n--- Registar Temperatura ---");
         int idPaciente = Utils.readIntFromConsole("ID do paciente: ");
         int idTecnico = Utils.readIntFromConsole("ID do técnico de saúde: ");
         double temperatura = Utils.readDoubleFromConsole("Temperatura corporal: ");
@@ -164,9 +164,9 @@ public class MenuUI {
         if (paciente != null && tecnico != null) {
             Temperatura temperaturaMedicao = new Temperatura(data, temperatura, paciente, tecnico);
             if (hospital.adicionarMedicao(temperaturaMedicao)) {
-                System.out.println("Temperatura registrada com sucesso!");
+                System.out.println("Temperatura registada com sucesso!");
             } else {
-                System.out.println("Erro ao registrar a temperatura.");
+                System.out.println("Erro ao registar a temperatura.");
             }
         } else {
             System.out.println("Erro: Paciente ou técnico não encontrado!");

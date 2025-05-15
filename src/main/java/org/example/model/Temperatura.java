@@ -20,6 +20,7 @@ public class Temperatura extends Medida{
 
     @Override
     public String toString() {
-        return super.toString() + ", Temperatura: " + temperatura;
+        return super.toString() + "\nTemperatura: " + temperatura;
+
     }
 }

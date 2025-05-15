@@ -27,11 +27,10 @@ public abstract class Medida {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Medida{");
-        sb.append("dataRegisto=").append(dataRegisto);
-        sb.append(", paciente=").append(paciente);
-        sb.append(", tecnico=").append(tecnico);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("\n");
+        sb.append("Data do Registo=").append(dataRegisto);
+        sb.append(", Paciente: ").append(paciente);
+        sb.append(", Técnico: ").append(tecnico);
         return sb.toString();
     }
 }
