@@ -50,26 +50,29 @@ public class MenuUI {
     public void run()  {
         String opcao;
         do {
-            System.out.println("###### MENU #####");
+            System.out.println("\n###### MENU #####");
             System.out.println("1. Registar paciente");
             System.out.println("2. Registar técnico de saúde");
             System.out.println("3. Registar Frequência Cardíaca");
             System.out.println("4. Registrar Saturação de Oxigênio");
             System.out.println("5. Registrar Temperatura");
             System.out.println("6. Exibir Lista de Pacientes");
-            System.out.println("7. Exibir Lista de Medições");
+            System.out.println("7. Exibir Lista de Mediçōes");
             System.out.println("0. Sair");
             opcao = Utils.readLineFromConsole("Escolha uma opção: ");
 
-            if (opcao.equals("1")) {
-                registarPaciente();
-                System.out.println("Selecionou a opção: Leitura de dados a partir de um ficheiro de texto");
+            switch (opcao) {
+                case "1" -> registarPaciente();
+                case "2" -> registarTecnicoSaude();
+                case "3" -> registrarFrequenciaCardiaca();
+                case "4" -> registrarSaturacaoOxigenio();
+                case "5" -> registrarTemperatura();
+                case "6" -> exibirListaPacientes();
+                case "7" -> exibirListaMedicoes();
+                case "0" -> System.out.println("Saindo...");
+                default -> System.out.println("Opção inválida. Tente novamente.");
             }
-            else if (opcao.equals("2")) {
-                System.out.println("Selecionou a opção: Visualização de dados no ecrã");
-            }
-        }
-        while (!opcao.equals("0"));
+        } while (!opcao.equals("0"));
     }
 
     private void registarPaciente() {
@@ -88,7 +91,7 @@ public class MenuUI {
         }
     }
 
-    private void registrarTecnicoSaude() {
+    private void registarTecnicoSaude() {
         System.out.println("\n--- Registrar Técnico de Saúde ---");
         int id = Utils.readIntFromConsole("ID do técnico: ");
         String nome = Utils.readLineFromConsole("Nome do técnico: ");
@@ -170,17 +173,17 @@ public class MenuUI {
         }
     }
 
-    private void listarPacientes() {
-        System.out.println("\n--- Lista de Pacientes ---");
+    private void exibirListaPacientes() {
+        System.out.println("\nLista de Pacientes:");
         for (Paciente paciente : hospital.getPacientes()) {
-            System.out.println(paciente);
+            System.out.println(paciente.toString());
         }
     }
 
-    private void listarMedicoes() {
-        System.out.println("\n--- Lista de Medições ---");
+    private void exibirListaMedicoes() {
+        System.out.println("\nLista de Medições:");
         for (Medida medida : hospital.getMedicoes()) {
-            System.out.println(medida);
+            System.out.println(medida.toString());
         }
     }
 }

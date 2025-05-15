@@ -55,12 +55,11 @@ public abstract class Pessoa  {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Pessoa{");
-        sb.append("id=").append(id);
-        sb.append(", nome='").append(nome).append('\'');
-        sb.append(", sexo=").append(sexo);
-        sb.append(", dataNascimento=").append(dataNascimento);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder("\n");
+        sb.append("Id:").append(id);
+        sb.append(", Nome:'").append(nome).append('\'');
+        sb.append(", Sexo: ").append(sexo);
+        sb.append(", Data de Nascimento: ").append(dataNascimento);
         return sb.toString();
     }
 }

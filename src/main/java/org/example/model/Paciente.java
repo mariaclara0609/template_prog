@@ -9,11 +9,11 @@ public class Paciente extends Pessoa  {
 
     public Paciente(int id, String nome, String sexo, Data dataNascimento, Data dataInternamento) {
         super(id, nome, sexo, dataNascimento);
-        this.dataInternamento = dataNascimento;
+        this.dataInternamento = dataInternamento;
     }
     public Paciente(Paciente p) {
         super(p);
-        this.dataInternamento = p.dataNascimento;
+        this.dataInternamento = p.dataInternamento;
     }
 
     public Data getDataInternamento() {
@@ -26,10 +26,8 @@ public class Paciente extends Pessoa  {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Paciente{");
-        sb.append(super.toString());
-        sb.append("dataInternamento=").append(dataInternamento);
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder(super.toString());
+        sb.append("Data de Internamento: ").append(dataInternamento);
         return sb.toString();
     }
 }

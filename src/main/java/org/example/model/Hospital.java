@@ -139,12 +139,11 @@ public class Hospital {
 
     @Override
     public String toString() {
-        return "Hospital{" +
-                "nome='" + nome + '\'' +
-                ", lstPacientes=" + lstPacientes +
-                ", lstMedicoes=" + lstMedicoes +
-                ", lstTecnicos=" + lstTecnicos +
-                '}';
+        final StringBuilder sb = new StringBuilder("Hospital: ").append(nome);
+        sb.append("\nLista de pacientes:").append(lstPacientes);
+        sb.append(", \nLista de Medições:").append(lstMedicoes);
+        sb.append(", \nLista de Técnicos de Saúde: ").append(lstTecnicos);
+        return sb.toString();
     }
 }
     
