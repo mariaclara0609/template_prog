@@ -18,6 +18,12 @@ public abstract class Medida {
     public void setDataRegisto(Data dataRegisto) {
         this.dataRegisto = dataRegisto;
     }
+    public Paciente getPaciente() {
+        return paciente;
+    }
+    public TecnicoSaude getTecnico() {
+        return tecnico;
+    }
 
     @Override
     public String toString() {

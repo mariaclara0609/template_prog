@@ -7,7 +7,7 @@ import java.util.Objects;
 public class Paciente extends Pessoa  {
     private Data dataInternamento;
 
-    public Paciente(int id, String nome, char sexo, Data dataNascimento, Data dataInternamento) {
+    public Paciente(int id, String nome, String sexo, Data dataNascimento, Data dataInternamento) {
         super(id, nome, sexo, dataNascimento);
         this.dataInternamento = dataNascimento;
     }

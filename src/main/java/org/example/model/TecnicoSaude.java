@@ -5,7 +5,7 @@ import org.example.utils.Data;
 public class TecnicoSaude extends Pessoa{
     private String especialidade;
 
-    public TecnicoSaude(int id, String nome, char sexo, Data dataNascimento, String especialidade) {
+    public TecnicoSaude(int id, String nome, String sexo, Data dataNascimento, String especialidade) {
         super(id, nome, sexo, dataNascimento);
         this.especialidade = especialidade;
     }
@@ -23,10 +23,6 @@ public class TecnicoSaude extends Pessoa{
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("TecnicoSaude{");
-        sb.append(super.toString());
-        sb.append(", especialidade='").append(especialidade).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return super.toString() + ", Especialidade: " + especialidade;
     }
 }

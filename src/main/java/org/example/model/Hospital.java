@@ -8,51 +8,83 @@ import java.util.List;
 public class Hospital {
     private String nome;
     private final List<Paciente> lstPacientes;
-
-    private final List<FrequenciaCardiaca> lstFreqCard;
-    //private final List<Saturacao> lstSaturacao;
-    //private final List<Temperatura> lstTemperatura;
+    private final List<Medida> lstMedicoes;
     private final List<TecnicoSaude> lstTecnicos;
-    // Completar
 
     public Hospital(String nome) {
         this.nome = nome;
         this.lstPacientes = new ArrayList<>();
-        this.lstFreqCard = new ArrayList<>();
-        //this.lstSaturacao = new ArrayList<>();
-        //this.lstTemperatura = new ArrayList<>();
+        this.lstMedicoes = new ArrayList<>();
         this.lstTecnicos = new ArrayList<>();
     }
-    // A completar
-    public boolean adicionarPaciente(Paciente paciente) {
-        // completar
-       return false;
-    }
-    public boolean adicionarFreqCardiaca(Data dataRegisto, double frequencia, Paciente paciente, TecnicoSaude tecnicoSaude) {
-        //.....
-        return false;
-    }
-    // Alternativa
-    public boolean adicionarFreqCardiaca1(Data dataRegisto, double frequencia, int idPaciente, int idTecnicoSaude) {
-        //Paciente p = procurarPaciente(idPaciente);
-        //TecnicoPaciente t = procurarTecnico(idTecnico);
-        //....
-        return false;
-    }
 
-    public boolean listaContemPaciente(int id) {
-        for(Paciente paciente : lstPacientes){
-            if(paciente.getId()==id){
-                return true;
-            }
+    // Método para adicionar paciente
+    public boolean adicionarPaciente(Paciente paciente) {
+        if (paciente != null && procurarPaciente(paciente.getId()) == null) {
+            lstPacientes.add(paciente);
+            return true;
         }
         return false;
     }
 
-    // Completar com outras funcionalidades
+    // Adicionar técnico de saúde
+    public boolean adicionarTecnico(TecnicoSaude tecnico) {
+        if (tecnico != null && procurarTecnico(tecnico.getId()) != null) {
+            lstTecnicos.add(tecnico);
+            return true;
+        }
+        return false;
+    }
 
+    // Método para adicionar medição
+    public boolean adicionarMedicao(Medida medida) {
+        if (medida != null && procurarPaciente(medida.getPaciente().getId()) != null && procurarTecnico(medida.getTecnico().getId()) != null) {
+            lstMedicoes.add(medida);
+            return true;
+        }
+        return false;
+    }
 
+    public Paciente procurarPaciente(int id) {
+        for (Paciente paciente : lstPacientes) {
+            if (paciente.getId() == id) {
+                return paciente; // Retorna o paciente assim que o encontra
+            }
+        }
+        return null; // Retorna null se nenhum paciente for encontrado
+    }
 
+    public TecnicoSaude procurarTecnico(int id) {
+        for (TecnicoSaude tecnico : lstTecnicos) {
+            if (tecnico.getId() == id) {
+                return tecnico; // Retorna o técnico assim que o encontra
+            }
+        }
+        return null; // Retorna null se nenhum técnico for encontrado
+    }
+
+    // Verificar se a lista contém um paciente com o ID dado
+    public boolean listaContemPaciente(int id) {
+        return procurarPaciente(id) != null;
+    }
+
+    public List<Paciente> getPacientes() {
+        return lstPacientes;
+    }
+
+    public List<Medida> getMedicoes() {
+        return lstMedicoes;
+    }
+
+    @Override
+    public String toString() {
+        return "Hospital{" +
+                "nome='" + nome + '\'' +
+                ", lstPacientes=" + lstPacientes +
+                ", lstMedicoes=" + lstMedicoes +
+                ", lstTecnicos=" + lstTecnicos +
+                '}';
+    }
 }
     
     

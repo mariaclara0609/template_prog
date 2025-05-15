@@ -5,10 +5,10 @@ import org.example.utils.Data;
 public abstract class Pessoa  {
     protected int id;
     protected String nome;
-    protected char sexo;
+    protected String sexo;
     protected Data dataNascimento;
 
-    public Pessoa(int id, String nome, char sexo, Data dataNascimento) {
+    public Pessoa(int id, String nome, String sexo, Data dataNascimento) {
         this.id = id;
         this.nome = nome;
         this.sexo = sexo;
@@ -30,7 +30,7 @@ public abstract class Pessoa  {
         return nome;
     }
 
-    public char getSexo() {
+    public String getSexo() {
         return sexo;
     }
 
@@ -46,7 +46,7 @@ public abstract class Pessoa  {
         this.nome = nome;
     }
 
-    public void setSexo(char sexo) {
+    public void setSexo(String sexo) {
         this.sexo = sexo;
     }
     public void setDataNascimento(Data dataNascimento) {

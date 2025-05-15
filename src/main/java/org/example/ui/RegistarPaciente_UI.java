@@ -31,7 +31,7 @@ public class RegistarPaciente_UI {
         int id = Utils.readIntFromConsole("Introduza o id do paciente: ");
        String nome = Utils.readLineFromConsole("Introduza o nome do paciente: ");
         // Adaptar
-        char sexo='f';
+        String sexo= "Feminino";
         Data dataNascimento = new Data();
         Data dataInternamento = new Data();
         return new Paciente(id,nome,sexo,dataNascimento, dataInternamento);
