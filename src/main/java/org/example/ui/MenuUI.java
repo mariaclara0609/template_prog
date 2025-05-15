@@ -16,10 +16,35 @@ import org.example.utils.Utils;
 import java.io.IOException;
 
 public class MenuUI {
-    private final Hospital hospital;
+    private Hospital hospital;
 
     public MenuUI(Hospital hospital) {
        this.hospital = hospital;
+    }
+
+    public void salvarDados() {
+        try {
+            hospital.salvarEstado("hospital.dat");
+            System.out.println("Dados salvos com sucesso!");
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar os dados: " + e.getMessage());
+        }
+    }
+
+    public void carregarDados() {
+        try {
+            this.hospital = Hospital.carregarEstado("hospital.dat");
+            System.out.println("Dados carregados com sucesso!");
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Erro ao carregar os dados: " + e.getMessage());
+        }
+    }
+
+    public void iniciarMenu() {
+        // Exemplo de interação
+        carregarDados(); // Carrega dados ao iniciar
+        // Outras opções do menu...
+        salvarDados(); // Salva dados ao sair
     }
 
     public void run()  {
