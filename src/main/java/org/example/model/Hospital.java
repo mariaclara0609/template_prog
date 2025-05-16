@@ -149,6 +149,47 @@ public class Hospital implements Serializable {
 
         return scoreDeGravidade;
     }
+    public void calcularScoreGravidade() {
+        double maiorScore = 0;
+        Paciente pacienteComMaiorRisco = null;
+
+        for (Paciente paciente : lstPacientes) {
+            double frequencia = 0;
+            double temperatura = 0;
+            double saturacao = 0;
+            int contMedicoes = 0;
+
+            // Percorre as medições para encontrar as associadas ao paciente
+            for (Medida medida : lstMedicoes) {
+                if (medida.getPaciente().equals(paciente)) {
+                    if (medida instanceof FrequenciaCardiaca) {
+                        frequencia = ((FrequenciaCardiaca) medida).getFrequencia();
+                    } else if (medida instanceof Temperatura) {
+                        temperatura = ((Temperatura) medida).getTemperatura();
+                    } else if (medida instanceof SaturacaoOxigenio) {
+                        saturacao = ((SaturacaoOxigenio) medida).getSaturacao();
+                    }
+                    contMedicoes++;
+                }
+            }
+
+            // Calcular o score apenas se houver medições
+            if (contMedicoes > 0) {
+                double score = calcularScoreDeGravidade(frequencia, temperatura, saturacao);
+                if (score > maiorScore) {
+                    maiorScore = score;
+                    pacienteComMaiorRisco = paciente;
+                }
+            }
+        }
+
+        if (pacienteComMaiorRisco != null) {
+            System.out.println("Paciente com maior risco: " + pacienteComMaiorRisco + " com score de gravidade: " + maiorScore);
+        } else {
+            System.out.println("Nenhum paciente encontrado.");
+        }
+    }
+
 
     // Método para classificar sinais vitais
     public String classificarSinalVital(Medida medida) {
@@ -205,6 +246,7 @@ public class Hospital implements Serializable {
         }
         return (pacientesCriticos / (double) totalPacientes) * 100;
     }
+
 
     @Override
     public String toString() {

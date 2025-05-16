@@ -50,6 +50,7 @@ public class MenuUI {
             System.out.println("6. Exibir Lista de Pacientes");
             System.out.println("7. Exibir Lista de Mediçōes");
             System.out.println("8. Alterar Sinais Vitais");
+            System.out.println("9. Calcular Score de Gravidade");
             System.out.println("0. Sair");
             opcao = Utils.readLineFromConsole("Escolha uma opção: ");
 
@@ -62,6 +63,7 @@ public class MenuUI {
                 case "6" -> exibirListaPacientes();
                 case "7" -> exibirListaMedicoes();
                 case "8" -> alterarSinaisVitais();
+                case "9" -> hospital.calcularScoreGravidade();
                 case "0" -> System.out.println("Saindo...");
                 default -> System.out.println("Opção inválida. Tente novamente.");
             }
