@@ -33,6 +33,96 @@ public class Hospital {
         }
     }
 
+    // Método para alterar os sinais vitais
+    public void alterarSinaisVitais(double percentualFrequencia, double percentualSaturacao, double percentualTemperatura) {
+        for (Medida medida : lstMedicoes) {
+            if (medida instanceof FrequenciaCardiaca) {
+                FrequenciaCardiaca freq = (FrequenciaCardiaca) medida;
+                double novaFrequencia = freq.getFrequencia() * (1 + percentualFrequencia / 100);
+                freq.setFrequencia(novaFrequencia);
+            }
+            if (medida instanceof SaturacaoOxigenio) {
+                SaturacaoOxigenio saturacao = (SaturacaoOxigenio) medida;
+                double novaSaturacao = saturacao.getSaturacao() * (1 + percentualSaturacao / 100);
+                saturacao.setSaturacao(novaSaturacao);
+            }
+            if (medida instanceof Temperatura) {
+                Temperatura temperatura = (Temperatura) medida;
+                double novaTemperatura = temperatura.getTemperatura() * (1 + percentualTemperatura / 100);
+                temperatura.setTemperatura(novaTemperatura);
+            }
+        }
+    }
+
+    // Método para classificar sinais vitais
+    public String classificarSinalVital(Medida medida) {
+        if (medida instanceof FrequenciaCardiaca) {
+            FrequenciaCardiaca freq = (FrequenciaCardiaca) medida;
+            if (freq.getFrequencia() < 60 || freq.getFrequencia() > 120) {
+                return "Crítico";
+            } else if (freq.getFrequencia() >= 100 && freq.getFrequencia() <= 120) {
+                return "Atenção";
+            } else {
+                return "Normal";
+            }
+        }
+
+        if (medida instanceof Temperatura) {
+            Temperatura temp = (Temperatura) medida;
+            if (temp.getTemperatura() < 36 || temp.getTemperatura() > 38.5) {
+                return "Crítico";
+            } else if (temp.getTemperatura() > 37.5 && temp.getTemperatura() <= 38.5) {
+                return "Atenção";
+            } else {
+                return "Normal";
+            }
+        }
+
+        if (medida instanceof SaturacaoOxigenio) {
+            SaturacaoOxigenio saturacao = (SaturacaoOxigenio) medida;
+            if (saturacao.getSaturacao() < 90) {
+                return "Crítico";
+            } else if (saturacao.getSaturacao() >= 90 && saturacao.getSaturacao() < 95) {
+                return "Atenção";
+            } else {
+                return "Normal";
+            }
+        }
+
+        return "Indeterminado";
+    }
+}
+
+// Método para calcular a percentagem de pacientes críticos
+public double calcularPercentagemCriticos() {
+    int totalPacientes = lstPacientes.size();
+    if (totalPacientes == 0) {
+        return 0.0; // Evita divisão por zero
+    }
+
+    int pacientesCriticos = 0;
+    for (Paciente paciente : lstPacientes) {
+        if (isPacienteCritico(paciente)) {
+            pacientesCriticos++;
+        }
+    }
+
+    return (pacientesCriticos / (double) totalPacientes) * 100;
+}
+
+// Verifica se um paciente está em situação crítica
+private boolean isPacienteCritico(Paciente paciente) {
+    for (Medida medida : lstMedicoes) {
+        if (medida.getPaciente().equals(paciente)) {
+            String classificacao = classificarSinalVital(medida);
+            if ("Crítico".equals(classificacao)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
     // Método para adicionar paciente
     public boolean adicionarPaciente(Paciente paciente) {
         if (paciente != null && procurarPaciente(paciente.getId()) == null) {
@@ -141,8 +231,8 @@ public class Hospital {
     public String toString() {
         final StringBuilder sb = new StringBuilder("Hospital: ").append(nome);
         sb.append("\nLista de pacientes:").append(lstPacientes);
-        sb.append(", \nLista de Medições:").append(lstMedicoes);
-        sb.append(", \nLista de Técnicos de Saúde: ").append(lstTecnicos);
+        sb.append("\nLista de Medições:").append(lstMedicoes);
+        sb.append("\nLista de Técnicos de Saúde: ").append(lstTecnicos);
         return sb.toString();
     }
 }

@@ -1,18 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.example.ui;
-
 //import model.ViagensTop;
 //import utils.Utils;
-
 import org.example.model.*;
 import org.example.utils.Data;
 import org.example.utils.Utils;
-
 import java.io.IOException;
 
 public class MenuUI {
@@ -20,6 +11,13 @@ public class MenuUI {
 
     public MenuUI(Hospital hospital) {
        this.hospital = hospital;
+    }
+
+    public void iniciarMenu() {
+        // Exemplo de interação
+        carregarDados(); // Carrega dados ao iniciar
+        // Outras opções do menu...
+        salvarDados(); // Salva dados ao sair
     }
 
     public void salvarDados() {
@@ -40,13 +38,6 @@ public class MenuUI {
         }
     }
 
-    public void iniciarMenu() {
-        // Exemplo de interação
-        carregarDados(); // Carrega dados ao iniciar
-        // Outras opções do menu...
-        salvarDados(); // Salva dados ao sair
-    }
-
     public void run()  {
         String opcao;
         do {
@@ -58,6 +49,8 @@ public class MenuUI {
             System.out.println("5. Registrar Temperatura");
             System.out.println("6. Exibir Lista de Pacientes");
             System.out.println("7. Exibir Lista de Mediçōes");
+            System.out.println("8. Alterar Sinais Vitais");
+            System.out.println("9. Calcular Percentagem de Pacientes Críticos");
             System.out.println("0. Sair");
             opcao = Utils.readLineFromConsole("Escolha uma opção: ");
 
@@ -69,10 +62,41 @@ public class MenuUI {
                 case "5" -> registrarTemperatura();
                 case "6" -> exibirListaPacientes();
                 case "7" -> exibirListaMedicoes();
+                case "8" -> alterarSinaisVitais();
+                case "9" -> calcularPercentagemCriticos();
                 case "0" -> System.out.println("Saindo...");
                 default -> System.out.println("Opção inválida. Tente novamente.");
             }
         } while (!opcao.equals("0"));
+    }
+
+    private void calcularPercentagemCriticos() {
+        System.out.println("\n--- Percentagem de Pacientes Críticos ---");
+        double percentagem = hospital.calcularPercentagemCriticos();
+        System.out.printf("A percentagem de pacientes em situação crítica é: %.2f%%%n", percentagem);
+    }
+
+    private void alterarSinaisVitais() {
+        System.out.println("\n--- Alterar Sinais Vitais ---");
+
+        double percentualFrequencia = lerPercentual("Percentual de alteração para Frequência Cardíaca (%): ");
+        double percentualSaturacao = lerPercentual("Percentual de alteração para Saturação de Oxigênio (%): ");
+        double percentualTemperatura = lerPercentual("Percentual de alteração para Temperatura Corporal (%): ");
+
+        hospital.alterarSinaisVitais(percentualFrequencia, percentualSaturacao, percentualTemperatura);
+
+        System.out.println("Alteração dos sinais vitais realizada com sucesso!");
+    }
+
+    private double lerPercentual(String mensagem) {
+        double percentual;
+        do {
+            percentual = Utils.readDoubleFromConsole(mensagem);
+            if (percentual < -100 || percentual > 100) {
+                System.out.println("Erro: O percentual deve estar entre -100% e 100%. Tente novamente.");
+            }
+        } while (percentual < -100 || percentual > 100);
+        return percentual;
     }
 
     private void registarPaciente() {
