@@ -1,12 +1,13 @@
 package org.example.model;
 
 import org.example.utils.Data;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Hospital {
-    private static final long serialVersionUID = 1L;
+public class Hospital implements Serializable {
+    private static final long serialVersionUID = 1L; // Garantir compatibilidade de serialização
     private String nome;
     private final List<Paciente> lstPacientes;
     private final List<Medida> lstMedicoes;
@@ -33,103 +34,12 @@ public class Hospital {
         }
     }
 
-    // Método para alterar os sinais vitais
-    public void alterarSinaisVitais(double percentualFrequencia, double percentualSaturacao, double percentualTemperatura) {
-        for (Medida medida : lstMedicoes) {
-            if (medida instanceof FrequenciaCardiaca) {
-                FrequenciaCardiaca freq = (FrequenciaCardiaca) medida;
-                double novaFrequencia = freq.getFrequencia() * (1 + percentualFrequencia / 100);
-                freq.setFrequencia(novaFrequencia);
-            }
-            if (medida instanceof SaturacaoOxigenio) {
-                SaturacaoOxigenio saturacao = (SaturacaoOxigenio) medida;
-                double novaSaturacao = saturacao.getSaturacao() * (1 + percentualSaturacao / 100);
-                saturacao.setSaturacao(novaSaturacao);
-            }
-            if (medida instanceof Temperatura) {
-                Temperatura temperatura = (Temperatura) medida;
-                double novaTemperatura = temperatura.getTemperatura() * (1 + percentualTemperatura / 100);
-                temperatura.setTemperatura(novaTemperatura);
-            }
-        }
-    }
-
-    // Método para classificar sinais vitais
-    public String classificarSinalVital(Medida medida) {
-        if (medida instanceof FrequenciaCardiaca) {
-            FrequenciaCardiaca freq = (FrequenciaCardiaca) medida;
-            if (freq.getFrequencia() < 60 || freq.getFrequencia() > 120) {
-                return "Crítico";
-            } else if (freq.getFrequencia() >= 100 && freq.getFrequencia() <= 120) {
-                return "Atenção";
-            } else {
-                return "Normal";
-            }
-        }
-
-        if (medida instanceof Temperatura) {
-            Temperatura temp = (Temperatura) medida;
-            if (temp.getTemperatura() < 36 || temp.getTemperatura() > 38.5) {
-                return "Crítico";
-            } else if (temp.getTemperatura() > 37.5 && temp.getTemperatura() <= 38.5) {
-                return "Atenção";
-            } else {
-                return "Normal";
-            }
-        }
-
-        if (medida instanceof SaturacaoOxigenio) {
-            SaturacaoOxigenio saturacao = (SaturacaoOxigenio) medida;
-            if (saturacao.getSaturacao() < 90) {
-                return "Crítico";
-            } else if (saturacao.getSaturacao() >= 90 && saturacao.getSaturacao() < 95) {
-                return "Atenção";
-            } else {
-                return "Normal";
-            }
-        }
-
-        return "Indeterminado";
-    }
-}
-
-// Método para calcular a percentagem de pacientes críticos
-public double calcularPercentagemCriticos() {
-    int totalPacientes = lstPacientes.size();
-    if (totalPacientes == 0) {
-        return 0.0; // Evita divisão por zero
-    }
-
-    int pacientesCriticos = 0;
-    for (Paciente paciente : lstPacientes) {
-        if (isPacienteCritico(paciente)) {
-            pacientesCriticos++;
-        }
-    }
-
-    return (pacientesCriticos / (double) totalPacientes) * 100;
-}
-
-// Verifica se um paciente está em situação crítica
-private boolean isPacienteCritico(Paciente paciente) {
-    for (Medida medida : lstMedicoes) {
-        if (medida.getPaciente().equals(paciente)) {
-            String classificacao = classificarSinalVital(medida);
-            if ("Crítico".equals(classificacao)) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-    // Método para adicionar paciente
+    // Método para adicionar um paciente
     public boolean adicionarPaciente(Paciente paciente) {
-        if (paciente != null && procurarPaciente(paciente.getId()) == null) {
-            lstPacientes.add(paciente);
-            return true;
+        if (paciente == null || lstPacientes.contains(paciente)) {
+            return false;
         }
-        return false;
+        return lstPacientes.add(paciente);
     }
 
     // Adicionar técnico de saúde
@@ -150,22 +60,45 @@ private boolean isPacienteCritico(Paciente paciente) {
         return false;
     }
 
+    // Método para procurar paciente pelo ID
     public Paciente procurarPaciente(int id) {
         for (Paciente paciente : lstPacientes) {
             if (paciente.getId() == id) {
-                return paciente; // Retorna o paciente assim que o encontra
+                return paciente;
             }
         }
-        return null; // Retorna null se nenhum paciente for encontrado
+        return null;
     }
 
+    // Método para procurar técnico pelo ID
     public TecnicoSaude procurarTecnico(int id) {
         for (TecnicoSaude tecnico : lstTecnicos) {
             if (tecnico.getId() == id) {
-                return tecnico; // Retorna o técnico assim que o encontra
+                return tecnico;
             }
         }
-        return null; // Retorna null se nenhum técnico for encontrado
+        return null;
+    }
+
+    // Método para alterar os sinais vitais
+    public void alterarSinaisVitais(double percentualFrequencia, double percentualSaturacao, double percentualTemperatura) {
+        for (Medida medida : lstMedicoes) {
+            if (medida instanceof FrequenciaCardiaca) {
+                FrequenciaCardiaca freq = (FrequenciaCardiaca) medida;
+                double novaFrequencia = freq.getFrequencia() * (1 + percentualFrequencia / 100);
+                freq.setFrequencia(novaFrequencia);
+            }
+            if (medida instanceof SaturacaoOxigenio) {
+                SaturacaoOxigenio saturacao = (SaturacaoOxigenio) medida;
+                double novaSaturacao = saturacao.getSaturacao() * (1 + percentualSaturacao / 100);
+                saturacao.setSaturacao(novaSaturacao);
+            }
+            if (medida instanceof Temperatura) {
+                Temperatura temperatura = (Temperatura) medida;
+                double novaTemperatura = temperatura.getTemperatura() * (1 + percentualTemperatura / 100);
+                temperatura.setTemperatura(novaTemperatura);
+            }
+        }
     }
 
     // Verificar se a lista contém um paciente com o ID dado
@@ -217,14 +150,60 @@ private boolean isPacienteCritico(Paciente paciente) {
         return scoreDeGravidade;
     }
 
-    public String classificarGravidade(double scoreDeGravidade) {
-        if (scoreDeGravidade > 0.7) {
-            return "Gravidade Alta";
-        } else if (scoreDeGravidade > 0.3) {
-            return "Gravidade Moderada";
-        } else {
-            return "Gravidade Baixa";
+    // Método para classificar sinais vitais
+    public String classificarSinalVital(Medida medida) {
+        if (medida instanceof FrequenciaCardiaca) {
+            FrequenciaCardiaca freq = (FrequenciaCardiaca) medida;
+            if (freq.getFrequencia() < 60 || freq.getFrequencia() > 120) {
+                return "Crítico";
+            } else if (freq.getFrequencia() >= 100 && freq.getFrequencia() <= 120) {
+                return "Atenção";
+            } else {
+                return "Normal";
+            }
         }
+
+        if (medida instanceof Temperatura) {
+            Temperatura temp = (Temperatura) medida;
+            if (temp.getTemperatura() < 36 || temp.getTemperatura() > 38.5) {
+                return "Crítico";
+            } else if (temp.getTemperatura() > 37.5 && temp.getTemperatura() <= 38.5) {
+                return "Atenção";
+            } else {
+                return "Normal";
+            }
+        }
+
+        return "Desconhecido"; // Caso a medida não seja reconhecida
+    }
+
+    // Verifica se um paciente está em situação crítica
+    private boolean isPacienteCritico(Paciente paciente) {
+        for (Medida medida : lstMedicoes) {
+            if (medida.getPaciente().equals(paciente)) {
+                String classificacao = classificarSinalVital(medida);
+                if ("Crítico".equals(classificacao)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // Método para calcular a percentagem de pacientes críticos
+    public double calcularPercentagemCriticos() {
+        int totalPacientes = lstPacientes.size();
+        if (totalPacientes == 0) {
+            return 0.0;
+        }
+
+        int pacientesCriticos = 0;
+        for (Medida medida : lstMedicoes) {
+            if ("Crítico".equals(classificarSinalVital(medida))) {
+                pacientesCriticos++;
+            }
+        }
+        return (pacientesCriticos / (double) totalPacientes) * 100;
     }
 
     @Override
@@ -236,5 +215,3 @@ private boolean isPacienteCritico(Paciente paciente) {
         return sb.toString();
     }
 }
-    
-    

@@ -50,7 +50,6 @@ public class MenuUI {
             System.out.println("6. Exibir Lista de Pacientes");
             System.out.println("7. Exibir Lista de Mediçōes");
             System.out.println("8. Alterar Sinais Vitais");
-            System.out.println("9. Calcular Percentagem de Pacientes Críticos");
             System.out.println("0. Sair");
             opcao = Utils.readLineFromConsole("Escolha uma opção: ");
 
@@ -63,17 +62,10 @@ public class MenuUI {
                 case "6" -> exibirListaPacientes();
                 case "7" -> exibirListaMedicoes();
                 case "8" -> alterarSinaisVitais();
-                case "9" -> calcularPercentagemCriticos();
                 case "0" -> System.out.println("Saindo...");
                 default -> System.out.println("Opção inválida. Tente novamente.");
             }
         } while (!opcao.equals("0"));
-    }
-
-    private void calcularPercentagemCriticos() {
-        System.out.println("\n--- Percentagem de Pacientes Críticos ---");
-        double percentagem = hospital.calcularPercentagemCriticos();
-        System.out.printf("A percentagem de pacientes em situação crítica é: %.2f%%%n", percentagem);
     }
 
     private void alterarSinaisVitais() {
