@@ -1,16 +1,18 @@
 package org.example.ui;
 //import model.ViagensTop;
 //import utils.Utils;
+
 import org.example.model.*;
 import org.example.utils.Data;
 import org.example.utils.Utils;
+
 import java.io.IOException;
 
 public class MenuUI {
     private Hospital hospital;
 
     public MenuUI(Hospital hospital) {
-       this.hospital = hospital;
+        this.hospital = hospital;
     }
 
     public void iniciarMenu() {
@@ -38,34 +40,35 @@ public class MenuUI {
         }
     }
 
-    public void run()  {
+    public void run() {
         String opcao;
         do {
             System.out.println("\n###### MENU #####");
             System.out.println("1. Registar paciente");
             System.out.println("2. Registar técnico de saúde");
-            System.out.println("3. Registar Frequência Cardíaca");
-            System.out.println("4. Registrar Saturação de Oxigênio");
-            System.out.println("5. Registrar Temperatura");
-            System.out.println("6. Exibir Lista de Pacientes");
-            System.out.println("7. Exibir Lista de Mediçōes");
-            System.out.println("8. Alterar Sinais Vitais");
-            System.out.println("9. Calcular Score de Gravidade");
+            System.out.println("3. Registar medições");
+            System.out.println("4. Exibir Lista de Pacientes");
+            System.out.println("5. Exibir Lista de Mediçōes");
+            System.out.println("6. Alterar Sinais Vitais");
+            System.out.println("7. Calcular Score de Gravidade");
+            System.out.println("8. Visualizar gráficos de barras das medições");
             System.out.println("0. Sair");
             opcao = Utils.readLineFromConsole("Escolha uma opção: ");
-
-            switch (opcao) {
-                case "1" -> registarPaciente();
-                case "2" -> registarTecnicoSaude();
-                case "3" -> registrarFrequenciaCardiaca();
-                case "4" -> registrarSaturacaoOxigenio();
-                case "5" -> registrarTemperatura();
-                case "6" -> exibirListaPacientes();
-                case "7" -> exibirListaMedicoes();
-                case "8" -> alterarSinaisVitais();
-                case "9" -> hospital.calcularScoreGravidade();
-                case "0" -> System.out.println("Saindo...");
-                default -> System.out.println("Opção inválida. Tente novamente.");
+            try {
+                switch (opcao) {
+                    case "1" -> registarPaciente();
+                    case "2" -> registarTecnicoSaude();
+                    case "3" -> adicionarMedicoes();;
+                    case "4" -> exibirListaPacientes();
+                    case "5" -> exibirListaMedicoes();
+                    case "6" -> alterarSinaisVitais();
+                    case "7" -> hospital.calcularScoreGravidade();
+                    case "8" -> ExibirGraficos.exibirGraficos(hospital.getMedicoes());
+                    case "0" -> System.out.println("Saindo...");
+                    default -> System.out.println("Opção inválida. Tente novamente.");
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println("Erro: " + e.getMessage());
             }
         } while (!opcao.equals("0"));
     }
@@ -124,71 +127,52 @@ public class MenuUI {
             System.out.println("Erro: Técnico já existe ou dados inválidos!");
         }
     }
+    private void adicionarMedicoes() {
+        System.out.println("Escolha o tipo de medição:");
+        System.out.println("1. Frequência Cardíaca");
+        System.out.println("2. Temperatura");
+        System.out.println("3. Saturação de Oxigênio");
 
-    private void registrarFrequenciaCardiaca() {
-        System.out.println("\n--- Registar Frequência Cardíaca ---");
-        int idPaciente = Utils.readIntFromConsole("ID do paciente: ");
-        int idTecnico = Utils.readIntFromConsole("ID do técnico de saúde: ");
-        double frequencia = Utils.readDoubleFromConsole("Frequência cardíaca: ");
-        Data data = Utils.readDateFromConsole("Data de registro (dd-MM-yyyy): ");
+        String tipo = Utils.readLineFromConsole("Digite o número da opção: ");
+        Data data = new Data(); // Supondo que você tenha um método para obter a data atual
+        Paciente paciente = escolherPaciente(); // Método para escolher um paciente
+        TecnicoSaude tecnico = escolherTecnico(); // Método para escolher um técnico
 
-        Paciente paciente = hospital.procurarPaciente(idPaciente);
-        TecnicoSaude tecnico = hospital.procurarTecnico(idTecnico);
-
-        if (paciente != null && tecnico != null) {
-            FrequenciaCardiaca freq = new FrequenciaCardiaca(data, frequencia, paciente, tecnico);
-            if (hospital.adicionarMedicao(freq)) {
-                System.out.println("Frequência cardíaca registada com sucesso!");
-            } else {
-                System.out.println("Erro ao registar a frequência cardíaca.");
-            }
-        } else {
-            System.out.println("Erro: Paciente ou técnico não encontrado!");
+        switch (tipo) {
+            case "1":
+                double frequencia = Double.parseDouble(Utils.readLineFromConsole("Digite a frequência cardíaca: "));
+                FrequenciaCardiaca fc = new FrequenciaCardiaca(data, frequencia, paciente, tecnico);
+                hospital.adicionarMedicao(fc);
+                break;
+            case "2":
+                double temperatura = Double.parseDouble(Utils.readLineFromConsole("Digite a temperatura: "));
+                Temperatura temp = new Temperatura(data, temperatura, paciente, tecnico);
+                hospital.adicionarMedicao(temp);
+                break;
+            case "3":
+                double saturacao = Double.parseDouble(Utils.readLineFromConsole("Digite a saturação de oxigênio: "));
+                SaturacaoOxigenio so = new SaturacaoOxigenio(data, saturacao, paciente, tecnico);
+                hospital.adicionarMedicao(so);
+                break;
+            default:
+                System.out.println("Opção inválida.");
         }
     }
-
-    private void registrarSaturacaoOxigenio() {
-        System.out.println("\n--- Registar Saturação de Oxigênio ---");
-        int idPaciente = Utils.readIntFromConsole("ID do paciente: ");
-        int idTecnico = Utils.readIntFromConsole("ID do técnico de saúde: ");
-        double saturacao = Utils.readDoubleFromConsole("Saturação de oxigênio: ");
-        Data data = Utils.readDateFromConsole("Data de registro (dd-MM-yyyy): ");
-
-        Paciente paciente = hospital.procurarPaciente(idPaciente);
-        TecnicoSaude tecnico = hospital.procurarTecnico(idTecnico);
-
-        if (paciente != null && tecnico != null) {
-            SaturacaoOxigenio saturacaoOxigenio = new SaturacaoOxigenio(data, saturacao, paciente, tecnico);
-            if (hospital.adicionarMedicao(saturacaoOxigenio)) {
-                System.out.println("Saturação de oxigênio registada com sucesso!");
-            } else {
-                System.out.println("Erro ao registar a saturação de oxigênio.");
-            }
-        } else {
-            System.out.println("Erro: Paciente ou técnico não encontrado!");
+    private Paciente escolherPaciente() {
+        System.out.println("Escolha um paciente:");
+        for (Paciente paciente : hospital.getPacientes()) {
+            System.out.println(paciente.getId() + ". " + paciente.getNome());
         }
+        int id = Integer.parseInt(Utils.readLineFromConsole("Digite o ID do paciente: "));
+        return hospital.procurarPaciente(id); // Supondo que você tenha um método para procurar paciente pelo ID
     }
-
-    private void registrarTemperatura() {
-        System.out.println("\n--- Registar Temperatura ---");
-        int idPaciente = Utils.readIntFromConsole("ID do paciente: ");
-        int idTecnico = Utils.readIntFromConsole("ID do técnico de saúde: ");
-        double temperatura = Utils.readDoubleFromConsole("Temperatura corporal: ");
-        Data data = Utils.readDateFromConsole("Data de registro (dd-MM-yyyy): ");
-
-        Paciente paciente = hospital.procurarPaciente(idPaciente);
-        TecnicoSaude tecnico = hospital.procurarTecnico(idTecnico);
-
-        if (paciente != null && tecnico != null) {
-            Temperatura temperaturaMedicao = new Temperatura(data, temperatura, paciente, tecnico);
-            if (hospital.adicionarMedicao(temperaturaMedicao)) {
-                System.out.println("Temperatura registada com sucesso!");
-            } else {
-                System.out.println("Erro ao registar a temperatura.");
-            }
-        } else {
-            System.out.println("Erro: Paciente ou técnico não encontrado!");
+    private TecnicoSaude escolherTecnico() {
+        System.out.println("Escolha um técnico de saúde:");
+        for (TecnicoSaude tecnico : hospital.getTecnicos()) {
+            System.out.println(tecnico.getId() + ". " + tecnico.getNome());
         }
+        int id = Integer.parseInt(Utils.readLineFromConsole("Digite o ID do técnico: "));
+        return hospital.procurarTecnico(id); // Supondo que você tenha um método para procurar técnico pelo ID
     }
 
     private void exibirListaPacientes() {
@@ -200,8 +184,8 @@ public class MenuUI {
 
     private void exibirListaMedicoes() {
         System.out.println("\nLista de Medições:");
-        for (Medida medida : hospital.getMedicoes()) {
-            System.out.println(medida.toString());
+        for (Medicao medicao : hospital.getMedicoes()) {
+            System.out.println(medicao.toString());
         }
     }
 }

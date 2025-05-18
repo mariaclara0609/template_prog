@@ -7,7 +7,7 @@ public class Temperatura extends Medida{
 
     public Temperatura(Data dataRegisto, double temperatura, Paciente paciente, TecnicoSaude tecnicoSaude) {
         super(dataRegisto, paciente, tecnicoSaude);
-        this.temperatura = temperatura;
+        setTemperatura(temperatura);
     }
 
     public double getTemperatura() {
@@ -15,6 +15,9 @@ public class Temperatura extends Medida{
     }
 
     public void setTemperatura(double temperatura) {
+        if (temperatura < 35 || temperatura > 42) {
+            throw new IllegalArgumentException("Temperatura deve estar entre 35 e 42 graus Celsius.");
+        }
         this.temperatura = temperatura;
     }
 

@@ -1,7 +1,5 @@
 package org.example.model;
 
-import org.example.utils.Data;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +8,7 @@ public class Hospital implements Serializable {
     private static final long serialVersionUID = 1L; // Garantir compatibilidade de serialização
     private String nome;
     private final List<Paciente> lstPacientes;
-    private final List<Medida> lstMedicoes;
+    private final List<Medicao> lstMedicoes;
     private final List<TecnicoSaude> lstTecnicos;
 
     public Hospital(String nome) {
@@ -36,8 +34,11 @@ public class Hospital implements Serializable {
 
     // Método para adicionar um paciente
     public boolean adicionarPaciente(Paciente paciente) {
-        if (paciente == null || lstPacientes.contains(paciente)) {
-            return false;
+        if (paciente == null) {
+            throw new IllegalArgumentException("Paciente não pode ser nulo.");
+        }
+        if (listaContemPaciente(paciente.getId())) {
+            throw new IllegalArgumentException("Paciente com ID " + paciente.getId() + " já existe.");
         }
         return lstPacientes.add(paciente);
     }
@@ -52,9 +53,9 @@ public class Hospital implements Serializable {
     }
 
     // Método para adicionar medição
-    public boolean adicionarMedicao(Medida medida) {
-        if (medida != null && procurarPaciente(medida.getPaciente().getId()) != null && procurarTecnico(medida.getTecnico().getId()) != null) {
-            lstMedicoes.add(medida);
+    public boolean adicionarMedicao(Medicao medicao) {
+        if (medicao != null && procurarPaciente(medicao.getPaciente().getId()) != null && procurarTecnico(medicao.getTecnico().getId()) != null) {
+            lstMedicoes.add(medicao);
             return true;
         }
         return false;
@@ -82,19 +83,17 @@ public class Hospital implements Serializable {
 
     // Método para alterar os sinais vitais
     public void alterarSinaisVitais(double percentualFrequencia, double percentualSaturacao, double percentualTemperatura) {
-        for (Medida medida : lstMedicoes) {
-            if (medida instanceof FrequenciaCardiaca) {
-                FrequenciaCardiaca freq = (FrequenciaCardiaca) medida;
+        for (Medicao medicao : lstMedicoes) {
+            if (medicao instanceof FrequenciaCardiaca) {
+                FrequenciaCardiaca freq = (FrequenciaCardiaca) medicao;
                 double novaFrequencia = freq.getFrequencia() * (1 + percentualFrequencia / 100);
                 freq.setFrequencia(novaFrequencia);
-            }
-            if (medida instanceof SaturacaoOxigenio) {
-                SaturacaoOxigenio saturacao = (SaturacaoOxigenio) medida;
+            } else if (medicao instanceof SaturacaoOxigenio) {
+                SaturacaoOxigenio saturacao = (SaturacaoOxigenio) medicao;
                 double novaSaturacao = saturacao.getSaturacao() * (1 + percentualSaturacao / 100);
                 saturacao.setSaturacao(novaSaturacao);
-            }
-            if (medida instanceof Temperatura) {
-                Temperatura temperatura = (Temperatura) medida;
+            } else if (medicao instanceof Temperatura) {
+                Temperatura temperatura = (Temperatura) medicao;
                 double novaTemperatura = temperatura.getTemperatura() * (1 + percentualTemperatura / 100);
                 temperatura.setTemperatura(novaTemperatura);
             }
@@ -110,7 +109,7 @@ public class Hospital implements Serializable {
         return lstPacientes;
     }
 
-    public List<Medida> getMedicoes() {
+    public List<Medicao> getMedicoes() {
         return lstMedicoes;
     }
 
@@ -160,7 +159,7 @@ public class Hospital implements Serializable {
             int contMedicoes = 0;
 
             // Percorre as medições para encontrar as associadas ao paciente
-            for (Medida medida : lstMedicoes) {
+            for (Medicao medida : lstMedicoes) {
                 if (medida.getPaciente().equals(paciente)) {
                     if (medida instanceof FrequenciaCardiaca) {
                         frequencia = ((FrequenciaCardiaca) medida).getFrequencia();
@@ -192,7 +191,7 @@ public class Hospital implements Serializable {
 
 
     // Método para classificar sinais vitais
-    public String classificarSinalVital(Medida medida) {
+    public String classificarSinalVital(Medicao medida) {
         if (medida instanceof FrequenciaCardiaca) {
             FrequenciaCardiaca freq = (FrequenciaCardiaca) medida;
             if (freq.getFrequencia() < 60 || freq.getFrequencia() > 120) {
@@ -220,9 +219,9 @@ public class Hospital implements Serializable {
 
     // Verifica se um paciente está em situação crítica
     private boolean isPacienteCritico(Paciente paciente) {
-        for (Medida medida : lstMedicoes) {
-            if (medida.getPaciente().equals(paciente)) {
-                String classificacao = classificarSinalVital(medida);
+        for (Medicao medicao : lstMedicoes) {
+            if (medicao.getPaciente().equals(paciente)) {
+                String classificacao = classificarSinalVital(medicao);
                 if ("Crítico".equals(classificacao)) {
                     return true;
                 }
@@ -239,8 +238,8 @@ public class Hospital implements Serializable {
         }
 
         int pacientesCriticos = 0;
-        for (Medida medida : lstMedicoes) {
-            if ("Crítico".equals(classificarSinalVital(medida))) {
+        for (Medicao medicao : lstMedicoes) {
+            if ("Crítico".equals(classificarSinalVital(medicao))) {
                 pacientesCriticos++;
             }
         }

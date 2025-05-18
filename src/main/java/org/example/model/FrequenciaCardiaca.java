@@ -4,12 +4,12 @@ import org.example.utils.Data;
 /**
  * Representa uma medição de frequência cardíaca associada a um paciente.
  */
-public class FrequenciaCardiaca extends Medida{
+public class FrequenciaCardiaca extends Medida implements Medicao{
     private double frequencia;
 
     public FrequenciaCardiaca(Data dataRegisto, double frequencia, Paciente paciente, TecnicoSaude tecnicoSaude) {
         super(dataRegisto, paciente, tecnicoSaude);
-        this.frequencia = frequencia;
+        setFrequencia(frequencia); // assim reutilizamos o setter para validar os valores
     }
     public double getFrequencia() {
         return frequencia;

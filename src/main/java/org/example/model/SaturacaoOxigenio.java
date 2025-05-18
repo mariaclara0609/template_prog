@@ -7,7 +7,7 @@ public class SaturacaoOxigenio extends Medida{
 
     public SaturacaoOxigenio(Data dataRegisto, double saturacao, Paciente paciente, TecnicoSaude tecnicoSaude) {
         super(dataRegisto, paciente, tecnicoSaude);
-        this.saturacao = saturacao;
+        setSaturacao(saturacao);
     }
 
     public double getSaturacao() {
@@ -15,6 +15,9 @@ public class SaturacaoOxigenio extends Medida{
     }
 
     public void setSaturacao(double saturacao) {
+        if (saturacao < 0 || saturacao > 100) {
+            throw new IllegalArgumentException("Saturação deve estar entre 0 e 100%.");
+        }
         this.saturacao = saturacao;
     }
 
